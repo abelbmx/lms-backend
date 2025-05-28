@@ -1,0 +1,19 @@
+/* Estilos personalizados */
+.zoomable {
+    cursor: pointer;
+}
+
+.swal2-popup {
+    font-size: 14px !important;
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Color semitransparente */
+}
+
+.cerrar-sesion:hover {
+    color: var(--bs-danger) !important;
+    background-color: #ec344c0f !important;
+}
+
