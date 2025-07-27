@@ -24,3 +24,18 @@ $hook['display_override'][] = array(
 	'filename' => 'minify_html.php',
 	'filepath' => 'hooks'
 );
+
+$hook['pre_system'] = array(
+    'class'    => 'Cors',
+    'function' => 'set_cors_headers',
+    'filename' => 'Cors.php',
+    'filepath' => 'hooks'
+);
+
+// También puedes agregar el hook en post_controller_constructor si necesitas acceso al CI instance
+$hook['post_controller_constructor'] = array(
+    'class'    => 'Cors',
+    'function' => 'set_cors_headers',
+    'filename' => 'Cors.php',
+    'filepath' => 'hooks'
+);

@@ -7,6 +7,9 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 
+        // ✅ AGREGAR: Configurar CORS antes de cualquier otra cosa
+        $this->set_cors_headers();
+
         /* COMMON :: ADMIN & PUBLIC */
         /* Load */
         $this->load->database();
@@ -54,8 +57,41 @@ class MY_Controller extends CI_Controller
             $this->data['mobile_ie'] = FALSE;
         }
 	}
-}
 
+    // ✅ NUEVA FUNCIÓN: Configurar headers CORS
+    private function set_cors_headers()
+    {
+        // Orígenes permitidos para desarrollo y producción
+        $allowed_origins = [
+            'http://localhost:3000',     // React dev server
+            'http://localhost:5173',     // Vite dev server
+            'http://127.0.0.1:3000',
+            'http://127.0.0.1:5173',
+            'https://tu-dominio.com'     // Cambiar por tu dominio en producción
+        ];
+
+        // Obtener el origen de la petición
+        $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+        // Solo permitir orígenes autorizados
+        if (in_array($origin, $allowed_origins)) {
+            header("Access-Control-Allow-Origin: " . $origin);
+        }
+
+        // Headers CORS necesarios
+        header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Origin, Accept, X-Api-Key");
+        header("Access-Control-Allow-Credentials: true");
+        header("Access-Control-Max-Age: 86400"); // Cache preflight por 24 horas
+
+        // Manejar peticiones OPTIONS (preflight)
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            // Responder con 200 OK para preflight requests
+            http_response_code(200);
+            exit();
+        }
+    }
+}
 
 class Admin_Controller extends MY_Controller
 {
@@ -99,7 +135,6 @@ class Admin_Controller extends MY_Controller
         }
     }
 }
-
 
 class Public_Controller extends MY_Controller
 {
